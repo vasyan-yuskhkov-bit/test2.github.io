@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  padding: 15px;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  color: #10b981;
+  font-size: 2.4rem;
+}
+
+.header p {
+  color: #10b981;
+  font-size: 1.1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 15px 35px rgba(16, 185, 129, 0.12);
+  text-align: center;
+}
+
+h2 {
+  color: #1f2937;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+}
+
+.input-field {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+button {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 16px;
+  font-size: 1.1rem;
+  border-radius: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #059669;
+}
+
+.secondary {
+  background: transparent;
+  color: #10b981;
+  border: 2px solid #10b981;
+}
+
+.danger {
+  background: #ef4444;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+.progress {
+  color: #10b981;
+  font-weight: bold;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-name {
+  color: #6b7280;
+  font-weight: normal;
+}
+
+.options button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 18px;
+  margin: 12px 0;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  font-size: 1.05rem;
+  background: white;
+  color: #1f2937;
+}
+
+.options button.correct {
+  border-color: #10b981;
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.options button.wrong {
+  border-color: #ef4444;
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.score-circle {
+  width: 170px;
+  height: 170px;
+  margin: 20px auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  border: 14px solid #e5e7eb;
+}

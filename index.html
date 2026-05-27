@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Клещевой энцефалит — Тест знаний</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+    }
+    .option {
+      transition: all 0.3s;
+    }
+    .option.correct { 
+      background-color: #d1fae5; 
+      border-color: #10b981; 
+      color: #065f46; 
+    }
+    .option.wrong { 
+      background-color: #fee2e2; 
+      border-color: #ef4444; 
+      color: #991b1b; 
+    }
+  </style>
+</head>
+<body class="min-h-screen py-8">
+  <div class="max-w-lg mx-auto px-4">
+
+    <!-- HEADER -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-emerald-700 mb-2">🛡️ Клещевой энцефалит</h1>
+      <p class="text-emerald-600">Тест знаний и профилактика</p>
+    </div>
+
+    <!-- Старт с вводом имени -->
+    <div id="start" class="card p-8 text-center">
+      <h2 class="text-2xl font-semibold mb-6 text-gray-800">Введите ваше имя</h2>
+      <input type="text" id="userName" 
+             class="w-full p-4 border border-gray-300 rounded-2xl text-lg mb-6 focus:outline-none focus:border-emerald-500" 
+             placeholder="Ваше имя" required>
+      <button onclick="startTest()" 
+              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xl py-5 rounded-2xl font-semibold">
+        Начать тест
+      </button>
+    </div>
+
+    <!-- Вопросы -->
+    <div id="quiz" class="card p-8 hidden">
+      <div class="flex justify-between mb-6 text-sm">
+        <span class="font-semibold text-emerald-700">Вопрос <span id="current">1</span>/10</span>
+        <span id="userDisplay" class="text-gray-500 font-medium"></span>
+      </div>
+      <h2 id="question" class="text-xl font-semibold mb-8 text-gray-800"></h2>
+      <div id="options" class="space-y-4"></div>
+      <button id="nextBtn" onclick="nextQuestion()" class="hidden w-full mt-8 bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl text-lg">
+        Далее →
+      </button>
+    </div>
+
+    <!-- Результат -->
+    <div id="result" class="card p-8 hidden text-center">
+      <h2 class="text-3xl font-bold text-emerald-700 mb-4">Результат для <span id="resultName" class="text-emerald-600"></span></h2>
+      <div id="scoreCircle" class="w-48 h-48 mx-auto rounded-full border-8 flex items-center justify-center text-6xl font-bold mb-6"></div>
+      <p id="resultText" class="text-2xl mb-6"></p>
+      <div id="recommendation" class="text-left bg-emerald-50 p-6 rounded-2xl mb-8"></div>
+      <button onclick="restart()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl mb-3">Пройти заново</button>
+      <button onclick="showAdmin()" class="w-full text-emerald-600 border border-emerald-600 py-4 rounded-2xl">👨‍💼 Админ-панель</button>
+    </div>
+
+    <!-- Админ-панель -->
+    <div id="admin" class="card p-8 hidden">
+      <h2 class="text-2xl font-bold mb-6">👨‍💼 Админ-панель</h2>
+      <input type="password" id="adminPass" placeholder="Введите пароль" 
+             class="w-full p-4 border border-gray-300 rounded-2xl mb-4 text-lg">
+      <button onclick="checkAdmin()" 
+              class="w-full bg-emerald-600 text-white py-4 rounded-2xl mb-4">Войти</button>
+      <div id="adminContent" class="hidden">
+        <h3 class="font-semibold mb-4">Результаты пользователей</h3>
+        <div id="adminStats" class="max-h-96 overflow-auto text-sm"></div>
+        <button onclick="clearResults()" class="mt-6 w-full bg-red-500 text-white py-3 rounded-2xl">Очистить все результаты</button>
+      </div>
+      <button onclick="hideAdmin()" class="mt-4 text-gray-500">← Назад</button>
+    </div>
+  </div>
+
+<script>
+// Вопросы
+const questions = [
+  { q: "Где обычно можно встретить иксодового клеща — переносчика вируса?", options: ["Только в густом еловом лесу","В траве, кустарниках, на лесных тропах и опушках, в парках","Только в болотистой местности","В сухой степи без растительности"], correct: 1 },
+  { q: "В какое время года риск укуса клеща наиболее высок?", options: ["Декабрь–февраль","Апрель–июнь и август–сентябрь","Только июль","Круглый год одинаков"], correct: 1 },
+  { q: "Как чаще всего клещ попадает на человека?", options: ["Падает с дерева","Прицепляется с травы или кустарника на одежду/обувь","Прыгает с земли","Заносится домашними животными при контакте"], correct: 1 },
+  { q: "Что нужно сделать сразу после обнаружения присосавшегося клеща?", options: ["Залить его маслом и ждать","Аккуратно удалить и поместить в контейнер","Прижечь йодом","Срочно принять антибиотик"], correct: 1 },
+  { q: "Куда лучше всего обращаться для исследования клеща?", options: ["В продуктовый магазин","В лабораторию Роспотребнадзора или инфекционную больницу","В аптеку","В ветеринарную клинику"], correct: 1 },
+  { q: "Какие симптомы указывают на клещевой энцефалит?", options: ["Только боль в месте укуса","Высокая температура, головная боль, тошнота, слабость","Зуд и сыпь по всему телу","Кашель и насморк"], correct: 1 },
+  { q: "Существует ли прививка от клещевого энцефалита?", options: ["Да, есть эффективные вакцины","Нет, только антибиотики","Есть, но она не помогает","Только народные средства"], correct: 0 },
+  { q: "Кому рекомендуется вакцинация в первую очередь?", options: ["Только детям до 7 лет","Только пенсионерам","Жителям эндемичных районов, лесникам, туристам, дачникам","Никому"], correct: 2 },
+  { q: "Какая защита в лесу самая эффективная?", options: ["Короткие шорты","Светлая закрытая одежда + репелленты","Нательный крестик","Громкое пение"], correct: 1 },
+  { q: "Что может назначить врач для экстренной профилактики?", options: ["Греющий компресс","Банки и горчичники","Иммуноглобулин или противовирусные препараты","Слабительные"], correct: 2 }
+];
+
+let current = 0, score = 0, userName = "";
+
+function startTest() {
+  userName = document.getElementById('userName').value.trim();
+  if (!userName) {
+    alert("Пожалуйста, введите ваше имя!");
+    return;
+  }
+
+  document.getElementById('start').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  current = 0;
+  score = 0;
+  document.getElementById('userDisplay').textContent = userName;
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[current];
+  document.getElementById('current').textContent = current + 1;
+  document.getElementById('question').textContent = q.q;
+
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.options.forEach((text, i) => {
+    const div = document.createElement('div');
+    div.className = 'option p-5 border-2 border-gray-200 rounded-2xl text-left cursor-pointer hover:border-emerald-300';
+    div.textContent = text;
+    div.onclick = () => selectAnswer(i, div);
+    opts.appendChild(div);
+  });
+  document.getElementById('nextBtn').classList.add('hidden');
+}
+
+function selectAnswer(selectedIdx, element) {
+  const correctIdx = questions[current].correct;
+  const allOptions = document.querySelectorAll('#options > div');
+
+  allOptions.forEach((opt, idx) => {
+    opt.style.pointerEvents = 'none';
+    if (idx === correctIdx) opt.classList.add('correct');
+  });
+
+  if (selectedIdx === correctIdx) {
+    score++;
+  } else {
+    element.classList.add('wrong');
+  }
+
+  document.getElementById('nextBtn').classList.remove('hidden');
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+
+  const percent = Math.round((score / 10) * 100);
+  document.getElementById('resultName').textContent = userName;
+
+  const circle = document.getElementById('scoreCircle');
+  circle.textContent = percent + '%';
+  circle.style.borderColor = percent >= 80 ? '#10b981' : percent >= 60 ? '#34d399' : '#f59e0b';
+
+  document.getElementById('resultText').innerHTML = percent >= 80 
+    ? 'Отлично! Вы хорошо знаете тему.' 
+    : 'Есть пробелы. Рекомендуем повторить материал.';
+
+  saveResult(percent);
+}
+
+function saveResult(percent) {
+  let results = JSON.parse(localStorage.getItem('tickResults') || '[]');
+  results.unshift({
+    name: userName,
+    date: new Date().toLocaleString('ru-RU'),
+    score: percent,
+    correct: score
+  });
+  localStorage.setItem('tickResults', JSON.stringify(results.slice(0, 50)));
+}
+
+function showAdmin() {
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('admin').classList.remove('hidden');
+  document.getElementById('adminContent').classList.add('hidden');
+}
+
+function checkAdmin() {
+  const pass = document.getElementById('adminPass').value;
+  if (pass === "admin123") {
+    document.getElementById('adminContent').classList.remove('hidden');
+    showAdminStats();
+  } else {
+    alert("Неверный пароль!");
+  }
+}
+
+function showAdminStats() {
+  let results = JSON.parse(localStorage.getItem('tickResults') || '[]');
+  let html = `<p class="mb-4">Всего прохождений: <b>${results.length}</b></p>`;
+  
+  results.forEach(r => {
+    html += `
+      <div class="border-b py-3">
+        <div class="font-medium text-gray-800">${r.name}</div>
+        <div class="flex justify-between text-sm text-gray-600">
+          <span>${r.date}</span>
+          <span class="font-bold">${r.score}% (${r.correct}/10)</span>
+        </div>
+      </div>`;
+  });
+  
+  document.getElementById('adminStats').innerHTML = html || '<p>Результатов пока нет</p>';
+}
+
+function clearResults() {
+  if (confirm("Удалить все результаты?")) {
+    localStorage.removeItem('tickResults');
+    showAdminStats();
+  }
+}
+
+function hideAdmin() {
+  document.getElementById('admin').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+}
+
+function restart() {
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('start').classList.remove('hidden');
+  document.getElementById('userName').value = '';
+}
+</script>
+</body>
+</html>
